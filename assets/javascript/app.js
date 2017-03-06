@@ -34,8 +34,8 @@ $(document).ready(function() {
       for(var i = 0; i < resultsArr.length; i++) {
         var resultObject = {
           'id': resultsArr[i].id,
-          'staticUrl': resultsArr[i].images.original_still.url,
-          'animatedUrl': resultsArr[i].images.original.url, 
+          'staticUrl': resultsArr[i].images.fixed_height_still.url,
+          'animatedUrl': resultsArr[i].images.fixed_height.url, 
           'rating': resultsArr[i].rating,
           'state': 'static'
         };
@@ -68,6 +68,8 @@ $(document).ready(function() {
     addNewUserTopic: function(userInput){
       if(($.inArray(userInput, appState.topicsArray)) > 0){
         alert(userInput + ' was already added, try adding a new topic!');
+      } else if(userInput === '') {
+        alert('Please enter a topic with at least one letter!')
       } else { //if not already in topic array
         appState.topicsArray.push(userInput);
         appState.phase = 'addNewUserTopic'
@@ -95,10 +97,12 @@ $(document).on('click', '.gif-image', function() {
   browser.playPauseGif($(this));
 });
 
-$('.submit-topic').on('click', function(){
+$('.topic-form').on('submit', function(){
   event.preventDefault();
-  var userInput = $('#topic-input').val().trim();
+  var userInput = $('.topic-input').val().trim();
   queries.addNewUserTopic(userInput);
+  //reset input to default placeholder/value
+  $('.topic-form').trigger('reset');
 });
 
 // ========
@@ -114,7 +118,7 @@ $('.submit-topic').on('click', function(){
       for(var i = 0; i < arr.length; i++){
         var newButton = $('<button></button>');
         newButton.html(arr[i]);
-        newButton.addClass('topic-button');
+        newButton.addClass('btn btn-default topic-button');
         newButton.attr('data-name',arr[i]);
         buttonSection.append(newButton);
       }
@@ -193,3 +197,7 @@ $('.submit-topic').on('click', function(){
 // phase starts as initialize when initializeApp function called 
 // phase is initialize until user clicks a topic button
 // phase changed to 'topicSelected' in onclick for a topic button
+
+
+// todo: 
+// add a play all button? 

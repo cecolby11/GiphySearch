@@ -17,15 +17,48 @@
 
 </head>
 <body>
+<div class="page">
+  <!-- container -->
+  <div class="container">
 
-  <div class="topic-button-section"></div>
-  <div class="gif-display-section"></div>
+    <div class="row">
 
-  <form class="topic-form">
-    <label for="topic-input">Add a gif topic here</label>
-    <input type="text" id="topic-input"><br>
-    <input type="submit" class="submit-topic" value="Add">
-  </form>
+      <div class="col-md-3 col-sm-3 col-xs-12">
+        <!-- panel -->
+        <div class="panel panel-default">
+          <div class="panel-body">
+            <div class="topic-button-section"></div>
 
+            <form class="topic-form">
+              <label for="topic-input" class="sr-only">Add a gif topic here</label> <!-- for screen readers -->
+              <input type="text" class="topic-input" placeholder="add your own topic!"><br>
+              <input type="submit" class="submit-topic" value="Add">
+            </form>
+          </div>
+        </div>
+        <!-- /.panel -->
+      </div>
+
+      <div class="col-md-9 col-sm-9 col-xs-12">
+        <div class="gif-display-section"></div>
+      </div>
+
+    </div>
+    <!-- /.row -->
+
+  </div>
+  <!-- /.container -->
+
+  <footer>
+    <div class="row">
+      <div class="col-md-12 text-center">
+      &#169; Casey Colby 2017
+      </div>
+    </div>
+  </footer>
+
+
+</div>
+<!-- /.page -->
 </body>
 </html>
