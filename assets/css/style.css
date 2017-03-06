@@ -1,12 +1,23 @@
 :root{
   /*color vars*/
+  --grain: #d7cec7;
+  --chalkboard: #565656;
+  --oxblood: #76323f;
+  --tan: #c09f80;
+
+  --sky: #caebf2;
+  --carbon: #a9a9a9;
+  --watermelon: #ff3b3f;
+  --neutral: #efefef;
 }
 
 /*page styling*/
 .page {
+  padding-top: 20px;
   width: 90%;
   margin: 0 auto;
-  background: pink;
+  background: var(--white);
+  color: var(--watermelon);
 }
 .container{
   max-width: 100%;
@@ -16,8 +27,14 @@ footer{
   height: 50px;
   line-height: 50px;
   margin-top: 40px;
+  border-top: thin solid var(--carbon);
   padding: 0;
   font-size: small;
+}
+
+.panel{
+  background: var(--neutral);
+  border-radius: 0px;
 }
 
 /*topic buttons*/
@@ -25,23 +42,28 @@ footer{
   margin: 0 auto;
 }
 .topic-button{
-  display: block;
-  margin: 4px auto;
+  margin: 5px;
+  color: var(--watermelon);
+  border: var(--watermelon) solid thin;
+  background: transparent;
+  font-weight: bolder;
 }
 
 /*topic form*/
 
 .topic-form{
-  margin: 30px auto 0 auto;
+  margin: 20px auto 0 auto;
   overflow: auto;
+  float:right;
+  max-width: 220px;
 }
 
 .topic-form .topic-input{
-
 }
 
 .topic-form .submit-topic{
-  
+  background: var(--carbon);
+  border: solid thin var(--carbon);
 }
 
 
@@ -50,12 +72,12 @@ footer{
 
 }
 .gif{
-
   margin: 10px;
   display: inline-block;
 }
 .gif-image{
-
+  /*using fixed height 200 from giphy*/
+  max-width: 100%; /*contain within its container */
 }
 .gif-rating{
 

@@ -9,7 +9,7 @@ $(document).ready(function() {
     return {
       'phase': 'initialize', // possible phases: initialize, addNewUserTopic, topicSelected
       'selectedTopic': null, //from selected button for search
-      'topicsArray': ['kitty','puppy', 'obama', 'joey tribbiani'],
+      'topicsArray': ['leonardo dicaprio','beyonce', 'jake gyllenhaal', 'emma stone', 'john legend'],
       'currentGifArray': []
     };
   }
@@ -57,7 +57,7 @@ $(document).ready(function() {
         method: 'GET'
       })
       .error(function() {
-        console.log('ERROR: bad API call');
+        console.log('Hmm, that didn\'t work. We seem to be having a problem on our end. Sorry to keep you waiting!');
       })
       .done(function(response){
         let resultsArray = response.data; //array of objects (each a gif)
@@ -66,7 +66,7 @@ $(document).ready(function() {
     }, 
 
     addNewUserTopic: function(userInput){
-      if(($.inArray(userInput, appState.topicsArray)) > 0){
+      if(($.inArray(userInput, appState.topicsArray)) >= 0){ //returns an index
         alert(userInput + ' was already added, try adding a new topic!');
       } else if(userInput === '') {
         alert('Please enter a topic with at least one letter!')
@@ -74,7 +74,20 @@ $(document).ready(function() {
         appState.topicsArray.push(userInput);
         appState.phase = 'addNewUserTopic'
         browser.refreshDisplay();
+        queries.showGifAddedAlert(userInput);
       }
+    }, 
+
+    showGifAddedAlert: function(userInput){
+      var newAlert = $('<div class=\'alert alert-success\'></div>');
+      newAlert.html('<strong>Success!</strong> ' + userInput + ' has been added!');
+      $('.topic-button-section').prepend(newAlert);
+      setTimeout(function() {
+        newAlert.fadeOut(1000*2);
+      }, 1000*1);
+      setTimeout(function() {
+        newAlert.remove();
+      }, 1000*3);
     }
 
   };
@@ -99,7 +112,7 @@ $(document).on('click', '.gif-image', function() {
 
 $('.topic-form').on('submit', function(){
   event.preventDefault();
-  var userInput = $('.topic-input').val().trim();
+  var userInput = $('.topic-input').val().trim().toLowerCase();
   queries.addNewUserTopic(userInput);
   //reset input to default placeholder/value
   $('.topic-form').trigger('reset');
