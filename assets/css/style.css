@@ -37,16 +37,34 @@ footer{
   border-radius: 0px;
 }
 
+.panel .page-header {
+  margin-top: 0; /*remove default*/
+  border-bottom: solid thin var(--carbon);
+}
+
+.panel .page-header h3 {
+  font-size: 22px;
+}
+
 /*topic buttons*/
 .topic-button-section{
   margin: 0 auto;
 }
-.topic-button{
+.btn-group {
   margin: 5px;
+}
+.btn-group .topic-button{
+  /*margin: 5px;*/
   color: var(--watermelon);
   border: var(--watermelon) solid thin;
   background: transparent;
   font-weight: bolder;
+}
+
+.btn-group .remove-button{
+  color: var(--watermelon);
+  background: white;
+  border: var(--watermelon) solid thin;
 }
 
 /*topic form*/

@@ -9,7 +9,7 @@ $(document).ready(function() {
     return {
       'phase': 'initialize', // possible phases: initialize, addNewUserTopic, topicSelected
       'selectedTopic': null, //from selected button for search
-      'topicsArray': ['leonardo dicaprio','beyonce', 'jake gyllenhaal', 'emma stone', 'john legend'],
+      'topicsArray': ['tom hanks','beyonce', 'herb brooks', 'oprah winfrey', 'richard hendricks', 'erlich bachman'],
       'currentGifArray': []
     };
   }
@@ -88,6 +88,11 @@ $(document).ready(function() {
       setTimeout(function() {
         newAlert.remove();
       }, 1000*3);
+    }, 
+
+    removeUserTopic: function(dataIdNum) {
+      //remove from array
+      appState.topicsArray.splice(dataIdNum,1);
     }
 
   };
@@ -98,15 +103,22 @@ $(document).ready(function() {
 
 // user clicks topic button
 // jquery event management so listener is added to buttons created in future too
-$(document).on('click', '.topic-button', function() {
+$('.topic-button-section').on('click', '.topic-button', function() {
     appState.selectedTopic = $(this).attr('data-name');
     queries.sendGifRequest(appState.selectedTopic);
     appState.phase = 'topicSelected';
 });
+$('.topic-button-section').on('click', '.remove-button', function() {
+  console.log('click');
+  var buttonId = $(this).attr('data-id-num');
+  queries.removeUserTopic(buttonId);
+  $('#button-' + buttonId).remove();
+  $(this).remove();
+});
 
 // user clicks a gif image
 // call function to animate/static-ify the gif 
-$(document).on('click', '.gif-image', function() {
+$('.gif-display-section').on('click', '.gif-image', function() {
   browser.playPauseGif($(this));
 });
 
@@ -127,20 +139,41 @@ $('.topic-form').on('submit', function(){
     renderButtons: function(arr) {
       var buttonSection = $('.topic-button-section');
       buttonSection.empty(); //remake all buttons every time called 
-
       for(var i = 0; i < arr.length; i++){
-        var newButton = $('<button></button>');
-        newButton.html(arr[i]);
+        var formattedWord = browser.formatCapitalization(arr[i]);
+        var newButton = $('<button>');
+        newButton.html(formattedWord);
         newButton.addClass('btn btn-default topic-button');
         newButton.attr('data-name',arr[i]);
-        buttonSection.append(newButton);
+        newButton.attr('id', 'button-'+i);
+
+        var removeButton = $('<button class=\'btn btn-default\'><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>');
+        removeButton.attr('data-id-num', i);
+        removeButton.addClass('remove-button');
+
+        var newDiv = $('<div class=\'btn-group\'></div>');
+        newDiv.append(newButton).append(removeButton);
+        buttonSection.append(newDiv);
+        // buttonSection.append(newButton).append(removeButton);
       }
+    },
+
+    formatCapitalization: function(word){
+        var splitBySpaces = word.split(' ');
+        var resultingWord = [];
+        for(var i = 0; i < splitBySpaces.length; i++){
+          var capFirst = splitBySpaces[i].charAt(0).toUpperCase();
+          var lowerRest = splitBySpaces[i].slice(1);
+          var name = capFirst + lowerRest;
+          resultingWord.push(name);
+        }
+        var combined = resultingWord.join(' ');
+        return combined;
     },
 
     renderGifs: function(array) {
       var gifSection = $('.gif-display-section');
       gifSection.empty(); //empty any previous gifs and replace not append
-
       for(var i = 0; i < array.length; i++){
         
         var newImage = $('<img>');
