@@ -196,7 +196,7 @@ $('.topic-form').on('submit', function(){
 
     renderGifInstruction: function() {
       var newDiv = $('<div>');
-      newDiv.addClass('page-header');
+      newDiv.addClass('page-header gif-instruction');
       newDiv.html('<h4>click a gif to play/pause</h4>');
       $('.gif-display-section').prepend(newDiv);
     },
@@ -261,7 +261,7 @@ $('.topic-form').on('submit', function(){
         $('<option>', {
           'selected': 'selected',
           'value': '',
-          'text': 'Select a muse...'
+          'text': 'Choose your inspiration...'
         }).appendTo(dropdown);
         // 3. populate with menu item from each button
         $('.topic-button').each(function() {
@@ -279,6 +279,7 @@ $('.topic-form').on('submit', function(){
 
     hideButtons: function() {
       $('.topic-button-section .btn-group').addClass('hidden');
+      $('.topic-button-panel .page-header').addClass('hidden');
     }
   };
   
