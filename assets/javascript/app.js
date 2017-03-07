@@ -57,7 +57,7 @@ $(document).ready(function() {
         method: 'GET'
       })
       .error(function() {
-        console.log('Hmm, that didn\'t work. We seem to be having a problem on our end. Sorry to keep you waiting!');
+        alert('Hmm, that didn\'t work. We seem to be having a problem on our end. Sorry to keep you waiting!');
       })
       .done(function(response){
         let resultsArray = response.data; //array of objects (each a gif)
@@ -108,16 +108,15 @@ $('.topic-button-section').on('click', '.topic-button', function() {
     queries.sendGifRequest(appState.selectedTopic);
     appState.phase = 'topicSelected';
 });
+
 $('.topic-button-section').on('click', '.remove-button', function() {
-  console.log('click');
   var buttonId = $(this).attr('data-id-num');
   queries.removeUserTopic(buttonId);
   $('#button-' + buttonId).remove();
   $(this).remove();
 });
 
-// user clicks a gif image
-// call function to animate/static-ify the gif 
+// user clicks a gif image, call function to animate/static-ify the gif 
 $('.gif-display-section').on('click', '.gif-image', function() {
   browser.playPauseGif($(this));
 });
@@ -182,7 +181,7 @@ $('.topic-form').on('submit', function(){
         newImage.addClass('gif-image');
 
         var newPar = $('<p></p>');
-        newPar.html('Rating: ' + array[i].rating);
+        newPar.html('Rating: ' + array[i].rating.toUpperCase());
         newPar.addClass('gif-rating');
 
         var newDiv = $('<div></div>');
@@ -191,6 +190,15 @@ $('.topic-form').on('submit', function(){
 
         gifSection.append(newDiv);
       }
+
+      browser.renderGifInstruction();
+    },
+
+    renderGifInstruction: function() {
+      var newDiv = $('<div>');
+      newDiv.addClass('page-header');
+      newDiv.html('<h4>click a gif to play/pause</h4>');
+      $('.gif-display-section').prepend(newDiv);
     },
 
     playPauseGif: function(gifImg){
@@ -234,16 +242,70 @@ $('.topic-form').on('submit', function(){
 
   initializeApp();
 
+
+//=================mobile-specific====================
+
+  var mobileQueries = {
+
+  };
+
+  var mobileDisplay = {
+    createDropdown: function() {
+      // drop button panel to the bottom
+        $('.topic-button-panel').insertBefore('footer');
+        // put them in a dropdown instead of individual buttons
+        // 1. create dropdown 
+        var dropdown = $('<select>');
+        dropdown.addClass('gif-dropdown');
+        // 2. create default option with text 
+        $('<option>', {
+          'selected': 'selected',
+          'value': '',
+          'text': 'Select a muse...'
+        }).appendTo(dropdown);
+        // 3. populate with menu item from each button
+        $('.topic-button').each(function() {
+          var buttonOption = $(this);
+          $('<option>', {
+            'value': buttonOption.attr('data-name'),
+            'text': buttonOption.text()
+          }).appendTo(dropdown);
+        });
+        // append dropdown to section in html
+        $(dropdown).insertBefore('.topic-button-panel .topic-form');
+        // hide the desktop buttons 
+        mobileDisplay.hideButtons();
+    },
+
+    hideButtons: function() {
+      $('.topic-button-section .btn-group').addClass('hidden');
+    }
+  };
+  
+  var isMobile = window.matchMedia("only screen and (max-width: 760px)");
+  // check if document loaded in mobile device
+  // note to self - runs on document load so have to refresh page if changing device in chrome simulator 
+  if (isMobile.matches) {
+      console.log('MOBILE DEVICE FOUND');
+      mobileDisplay.createDropdown();
+
+      // ================
+      // MOBILE EVENT MANAGEMENT
+      // ================
+      // dropdown selection
+      $('.gif-dropdown').change(function() {
+        console.log($(this).find('option:selected').val());
+        // method to find the selected option in the scroll selector, get its value
+        var selectedTopic = $(this).find('option:selected').val();
+        queries.sendGifRequest(appState.selectedTopic);
+        appState.phase = 'topicSelected';
+      });
+  };
+
 });
 
-
-//=====================================
 
 //PHASES: 
 // phase starts as initialize when initializeApp function called 
 // phase is initialize until user clicks a topic button
 // phase changed to 'topicSelected' in onclick for a topic button
-
-
-// todo: 
-// add a play all button? 

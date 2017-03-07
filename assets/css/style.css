@@ -50,10 +50,10 @@ footer{
 .topic-button-section{
   margin: 0 auto;
 }
-.btn-group {
+.topic-button-section .btn-group {
   margin: 5px;
 }
-.btn-group .topic-button{
+.topic-button-section .btn-group .topic-button{
   /*margin: 5px;*/
   color: var(--watermelon);
   border: var(--watermelon) solid thin;
@@ -61,7 +61,7 @@ footer{
   font-weight: bolder;
 }
 
-.btn-group .remove-button{
+.topic-button-section .btn-group .remove-button{
   color: var(--watermelon);
   background: white;
   border: var(--watermelon) solid thin;
@@ -89,14 +89,26 @@ footer{
 .gif-display-section {
 
 }
-.gif{
+.gif-display-section .page-header{
+  text-align:right;
+}
+.gif-display-section .gif{
   margin: 10px;
   display: inline-block;
 }
-.gif-image{
+.gif-display-section .gif-image{
   /*using fixed height 200 from giphy*/
   max-width: 100%; /*contain within its container */
+  box-shadow: 0px 2px 7px var(--chalkboard);
 }
-.gif-rating{
+.gif-display-section .gif-rating{
+  font-size: 17px;
+  margin: 5px;
+}
 
+/*mobile landscape or smaller*/
+@media screen and (max-width: 640px) {
+  .topic-button-section .topic-dropdown {
+    
+  }
 }
