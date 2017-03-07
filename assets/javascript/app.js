@@ -25,7 +25,7 @@ $(document).ready(function() {
 
   var queries = {
     // Vars for data
-    'searchEndpoint': 'http://api.giphy.com/v1/gifs/search?',
+    'searchEndpoint': 'https://api.giphy.com/v1/gifs/search?',
     'numResults': '&limit=10',
     'apiKey': '&api_key=dc6zaTOxFJmzC', // put this at end of query
 
