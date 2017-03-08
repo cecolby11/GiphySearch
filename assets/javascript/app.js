@@ -218,16 +218,70 @@ $(document).ready(function() {
         case 'addNewUserTopic':
           browser.renderButtons(appState.topicsArray);
           browser.showTopicAddedAlert(appState.userInput);
+          // push all (including new) buttons into a dropdown if mobile
+          if(isMobile.matches){
+            mobileDisplay.createDropdown();
+          }
           break;
-          browser.showTopicAddedAlert()
         case 'topicSelected': 
           browser.renderGifs(appState.currentGifArray);
           break;
         case 'removeUserTopic':
           browser.showTopicRemovedAlert(appState.removeButtonId);
           break;
+        case 'resizeWindow':
+          browser.renderButtons(appState.topicsArray);
+          break;
       }
     }
+  };
+
+//================
+// MOBILE DISPLAY
+//================
+
+  var mobileDisplay = {
+    createDropdown: function() {
+      //remove any existing dropdown
+      $('.gif-dropdown').remove();
+
+      // drop button panel to the bottom
+      $('.topic-button-panel').insertBefore('footer');
+      // put them in a dropdown instead of individual buttons
+      // 1. create dropdown 
+      var dropdown = $('<select>');
+      dropdown.addClass('gif-dropdown');
+      // 2. create default option with text 
+      $('<option>', {
+        'selected': 'selected',
+        'value': '',
+        'text': 'Choose your inspiration...'
+      }).appendTo(dropdown);
+      // 3. populate with menu item from each button
+      $('.topic-button').each(function() {
+        var buttonOption = $(this);
+        $('<option>', {
+          'value': buttonOption.attr('data-name'),
+          'text': buttonOption.text()
+        }).appendTo(dropdown);
+      });
+      // append dropdown to section in html
+      $(dropdown).insertBefore('.topic-button-panel .topic-form');
+      // hide the desktop buttons 
+      mobileDisplay.hideButtons();
+    },
+
+    hideButtons: function() {
+      $('.topic-button-section .btn-group').addClass('hidden');
+      $('.topic-button-panel .page-header').addClass('hidden');
+    }, 
+
+    addDropdownOption: function(userInput) {
+        $('<option>', {
+          'value': userInput,
+            'text': userInput
+          }).appendTo($('.dropdown'));
+    },
   };
 
 // ================
@@ -269,6 +323,18 @@ $(document).ready(function() {
     $('.topic-form').trigger('reset');
   });
 
+// ================
+// MOBILE EVENT MANAGEMENT
+// ================
+  // make dropdown selection work
+  $('.topic-button-panel').on('change', '.gif-dropdown',function() {
+    // method to find the selected option in the scroll selector, get its value
+    var selectedTopic = $(this).find('option:selected').val();
+    appState.selectedTopic = selectedTopic;
+    queries.sendGifRequest(appState.selectedTopic);
+    appState.phase = 'topicSelected';
+  });
+
 
 // =============
 // INTIALIZE APP
@@ -277,65 +343,28 @@ $(document).ready(function() {
   initializeApp();
 
 
-//=================mobile-specific====================
-
-  var mobileQueries = {
-
-  };
-
-  var mobileDisplay = {
-    createDropdown: function() {
-      // drop button panel to the bottom
-        $('.topic-button-panel').insertBefore('footer');
-        // put them in a dropdown instead of individual buttons
-        // 1. create dropdown 
-        var dropdown = $('<select>');
-        dropdown.addClass('gif-dropdown');
-        // 2. create default option with text 
-        $('<option>', {
-          'selected': 'selected',
-          'value': '',
-          'text': 'Choose your inspiration...'
-        }).appendTo(dropdown);
-        // 3. populate with menu item from each button
-        $('.topic-button').each(function() {
-          var buttonOption = $(this);
-          $('<option>', {
-            'value': buttonOption.attr('data-name'),
-            'text': buttonOption.text()
-          }).appendTo(dropdown);
-        });
-        // append dropdown to section in html
-        $(dropdown).insertBefore('.topic-button-panel .topic-form');
-        // hide the desktop buttons 
-        mobileDisplay.hideButtons();
-    },
-
-    hideButtons: function() {
-      $('.topic-button-section .btn-group').addClass('hidden');
-      $('.topic-button-panel .page-header').addClass('hidden');
-    }
-  };
-  
+  // media query (mobile-sizes)
   var isMobile = window.matchMedia("only screen and (max-width: 760px)");
-  // check if document loaded in mobile device
-  // note to self - runs on document load so have to refresh page if changing device in chrome simulator 
+  // .matches property: bool depending on query result 
+  // check on page-load
   if (isMobile.matches) {
       console.log('MOBILE DEVICE FOUND');
       mobileDisplay.createDropdown();
-
-      // ================
-      // MOBILE EVENT MANAGEMENT
-      // ================
-      // dropdown selection
-      $('.gif-dropdown').change(function() {
-        console.log($(this).find('option:selected').val());
-        // method to find the selected option in the scroll selector, get its value
-        var selectedTopic = $(this).find('option:selected').val();
-        queries.sendGifRequest(appState.selectedTopic);
-        appState.phase = 'topicSelected';
-      });
-  };
+  }
+  // add listener for future resizes 
+  $(window).on('resize', function() {
+    if (isMobile.matches) {
+      mobileDisplay.createDropdown();
+    } else {
+      //remove any existing dropdown
+      $('.gif-dropdown').remove();
+      // pop button panel to the top
+      $('.topic-button-panel').appendTo('.col-md-4');
+      appState.phase = 'resizeWindow';
+      // re-render the buttons as buttons!
+      browser.refreshDisplay();
+    }
+  })
 
 });
 
