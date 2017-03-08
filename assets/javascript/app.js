@@ -158,10 +158,7 @@ $(document).ready(function() {
     },
 
     renderGifHeading: function() {
-      var newDiv = $('<div>');
-      newDiv.addClass('page-header');
-      newDiv.html('<h4>click a gif to play/pause</h4>');
-      $('.gif-display-section').prepend(newDiv);
+      $('.gif-instruction').removeClass('hidden');
     },
 
     playPauseGif: function(gifImg){
@@ -231,6 +228,8 @@ $(document).ready(function() {
           break;
         case 'resizeWindow':
           browser.renderButtons(appState.topicsArray);
+          $('.topic-button-panel .page-header').removeClass('hidden');
+          $('.gif-instruction').html('Click a gif to play/pause');
           break;
       }
     }
@@ -243,14 +242,14 @@ $(document).ready(function() {
   var mobileDisplay = {
     createDropdown: function() {
       //remove any existing dropdown
-      $('.gif-dropdown').remove();
+      $('.topic-dropdown').remove();
 
       // drop button panel to the bottom
       $('.topic-button-panel').insertBefore('footer');
       // put them in a dropdown instead of individual buttons
       // 1. create dropdown 
       var dropdown = $('<select>');
-      dropdown.addClass('gif-dropdown');
+      dropdown.addClass('topic-dropdown');
       // 2. create default option with text 
       $('<option>', {
         'selected': 'selected',
@@ -267,8 +266,9 @@ $(document).ready(function() {
       });
       // append dropdown to section in html
       $(dropdown).insertBefore('.topic-button-panel .topic-form');
-      // hide the desktop buttons 
+
       mobileDisplay.hideButtons();
+      mobileDisplay.updateGifInstruction();
     },
 
     hideButtons: function() {
@@ -282,6 +282,10 @@ $(document).ready(function() {
             'text': userInput
           }).appendTo($('.dropdown'));
     },
+
+    updateGifInstruction: function(){
+      $('.gif-instruction').html('Tap gifs to play/pause');
+    }
   };
 
 // ================
@@ -327,7 +331,7 @@ $(document).ready(function() {
 // MOBILE EVENT MANAGEMENT
 // ================
   // make dropdown selection work
-  $('.topic-button-panel').on('change', '.gif-dropdown',function() {
+  $('.topic-button-panel').on('change', '.topic-dropdown',function() {
     // method to find the selected option in the scroll selector, get its value
     var selectedTopic = $(this).find('option:selected').val();
     appState.selectedTopic = selectedTopic;
@@ -357,7 +361,7 @@ $(document).ready(function() {
       mobileDisplay.createDropdown();
     } else {
       //remove any existing dropdown
-      $('.gif-dropdown').remove();
+      $('.topic-dropdown').remove();
       // pop button panel to the top
       $('.topic-button-panel').appendTo('.col-md-4');
       appState.phase = 'resizeWindow';

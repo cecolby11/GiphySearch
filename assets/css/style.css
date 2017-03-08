@@ -23,6 +23,9 @@
   max-width: 100%;
   min-height: calc(100vh - 90px); /*viewport height - footer height - footer margin - footer border... put viewport in html links!*/
 }
+header {
+  text-align: right;
+}
 footer{
   height: 50px;
   line-height: 50px;
@@ -70,7 +73,7 @@ footer{
 /*topic form*/
 
 .topic-form{
-  margin: 20px auto 0 auto;
+  margin: 20px auto 20px auto;
   overflow: auto;
   float:right;
   max-width: 220px;
@@ -86,12 +89,6 @@ footer{
 
 
 /*gifs*/
-.gif-display-section {
-
-}
-.gif-display-section .page-header{
-  text-align:right;
-}
 .gif-display-section .gif{
   margin: 10px;
   display: inline-block;
@@ -106,18 +103,41 @@ footer{
   margin: 5px;
 }
 
-/*mobile landscape or smaller*/
-@media screen and (max-width: 640px) {
+/*tablet or smaller */
+@media screen and (max-width: 768px) {
+  header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    background: var(--watermelon);
+    text-align: center;
+    color: white;
+    width: 100%;
+    height: 60px;
+    padding-top: 10px;
+  }
+  header h2, 
+  header h4 {
+    margin-top: 0;
+    font-weight: lighter;
+  }
+  header h4 {
+    background: white;
+    color: var(--watermelon);
+    padding: 5px;
+  }
   footer{
     display: none;
   }
   .page {
+    width: 100%;
     margin: 0 auto;
     padding: 0;
   }
   .container{
     max-width: 100%;
-    padding: 0;
+    padding: 15px;
     margin: 0;
     width: 100%;
   }
@@ -129,13 +149,28 @@ footer{
     width: 100%;
     left: 0;
     height: 100px;
+    padding: 0;
   }
   .gif-display-section .gif-image{
-    height: 70px;
+    height: 200px;
     margin: 0 auto;
     box-shadow: 0 0 0;
   }
   .gif-display-section .gif-rating{
     font-size: 10px;
   }
+  .gif-display-section {
+    margin-top: 70px; /*so it starts below header*/
+    margin-bottom: 100px; /*so it shows above topic section*/
+  }
+}
+
+/*phone landscape or smaller*/
+@media screen and (max-width: 640px) {
+  .gif-display-section .gif-image{
+    height: 100px;
+    margin: 0 auto;
+    box-shadow: 0 0 0;
+  }
+
 }
