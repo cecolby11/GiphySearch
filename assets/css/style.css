@@ -89,7 +89,7 @@ footer{
 .gif-display-section {
 
 }
-.gif-display-section .gif-instruction{
+.gif-display-section .page-header{
   text-align:right;
 }
 .gif-display-section .gif{
@@ -123,23 +123,12 @@ footer{
   }
   /*fix at bottom of screen*/
   .topic-button-panel{
-    position: absolute;
+    position: fixed;
     bottom: 0;
+    margin-bottom: 0;
     width: 100%;
     left: 0;
     height: 100px;
-  }
-  .gif-display-section .gif-instruction{
-    background: var(--watermelon);
-    color: white;
-    width: 100%;
-    height: 40px;
-    margin: 0;
-    text-align: center;
-  }
-  .gif-display-section .gif-instruction h4{
-    font-weight: lighter;
-    line-height: 40px;
   }
   .gif-display-section .gif-image{
     height: 70px;

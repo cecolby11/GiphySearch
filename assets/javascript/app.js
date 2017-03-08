@@ -9,7 +9,7 @@ $(document).ready(function() {
     return {
       'phase': 'initialize', // possible phases: initialize, addNewUserTopic, topicSelected
       'selectedTopic': null, //from selected button for search
-      'topicsArray': ['tom hanks','beyonce', 'herb brooks', 'oprah winfrey', 'richard hendricks', 'erlich bachman'],
+      'topicsArray': ['tom hanks','beyonce', 'cookie monster', 'herb brooks', 'oprah winfrey', 'richard hendricks', 'erlich bachman', 'betty white'],
       'currentGifArray': []
     };
   }
@@ -196,7 +196,7 @@ $('.topic-form').on('submit', function(){
 
     renderGifInstruction: function() {
       var newDiv = $('<div>');
-      newDiv.addClass('page-header gif-instruction');
+      newDiv.addClass('page-header');
       newDiv.html('<h4>click a gif to play/pause</h4>');
       $('.gif-display-section').prepend(newDiv);
     },
