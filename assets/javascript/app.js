@@ -7,10 +7,13 @@ $(document).ready(function() {
       
   function resetAppState() {
     return {
-      'phase': 'initialize', // possible phases: initialize, addNewUserTopic, topicSelected
+      'phase': 'initialize', // possible phases: initialize, addNewUserTopic, removeUserTopic, topicSelected
       'selectedTopic': null, //from selected button for search
       'topicsArray': ['tom hanks','beyonce', 'cookie monster', 'herb brooks', 'oprah winfrey', 'richard hendricks', 'erlich bachman', 'betty white'],
-      'currentGifArray': []
+      'currentGifArray': [],
+      'userInput': null,
+      'removeButtonId': null,
+      'nameToRemove': null, 
     };
   }
 
@@ -72,62 +75,21 @@ $(document).ready(function() {
         alert('Please enter a topic with at least one letter!')
       } else { //if not already in topic array
         appState.topicsArray.push(userInput);
-        appState.phase = 'addNewUserTopic'
+        appState.phase = 'addNewUserTopic';
         browser.refreshDisplay();
-        queries.showGifAddedAlert(userInput);
       }
-    }, 
+    },  
 
-    showGifAddedAlert: function(userInput){
-      var newAlert = $('<div class=\'alert alert-success\'></div>');
-      newAlert.html('<strong>Success!</strong> ' + userInput + ' has been added!');
-      $('.topic-button-section').prepend(newAlert);
-      setTimeout(function() {
-        newAlert.fadeOut(1000*2);
-      }, 1000*1);
-      setTimeout(function() {
-        newAlert.remove();
-      }, 1000*3);
-    }, 
-
-    removeUserTopic: function(dataIdNum) {
-      //remove from array
-      appState.topicsArray.splice(dataIdNum,1);
+    removeUserTopic: function(topicToRemove) {
+      var indexOfTopic = appState.topicsArray.indexOf(topicToRemove);
+      // show removal alert
+      appState.phase = 'removeUserTopic';
+      browser.refreshDisplay();
+      // remove from array
+      appState.topicsArray.splice(indexOfTopic,1);
     }
 
   };
-
-// ================
-// EVENT MANAGEMENT
-// ================
-
-// user clicks topic button
-// jquery event management so listener is added to buttons created in future too
-$('.topic-button-section').on('click', '.topic-button', function() {
-    appState.selectedTopic = $(this).attr('data-name');
-    queries.sendGifRequest(appState.selectedTopic);
-    appState.phase = 'topicSelected';
-});
-
-$('.topic-button-section').on('click', '.remove-button', function() {
-  var buttonId = $(this).attr('data-id-num');
-  queries.removeUserTopic(buttonId);
-  $('#button-' + buttonId).remove();
-  $(this).remove();
-});
-
-// user clicks a gif image, call function to animate/static-ify the gif 
-$('.gif-display-section').on('click', '.gif-image', function() {
-  browser.playPauseGif($(this));
-});
-
-$('.topic-form').on('submit', function(){
-  event.preventDefault();
-  var userInput = $('.topic-input').val().trim().toLowerCase();
-  queries.addNewUserTopic(userInput);
-  //reset input to default placeholder/value
-  $('.topic-form').trigger('reset');
-});
 
 // ========
 // DISPLAY
@@ -157,6 +119,7 @@ $('.topic-form').on('submit', function(){
       }
     },
 
+    //storing everything as lowercased and formatting capitalization for display so we can prevent duplicates being added by the user even if their capitalization is different. Don't want to end up with multiples! 
     formatCapitalization: function(word){
         var splitBySpaces = word.split(' ');
         var resultingWord = [];
@@ -191,10 +154,10 @@ $('.topic-form').on('submit', function(){
         gifSection.append(newDiv);
       }
 
-      browser.renderGifInstruction();
+      browser.renderGifHeading();
     },
 
-    renderGifInstruction: function() {
+    renderGifHeading: function() {
       var newDiv = $('<div>');
       newDiv.addClass('page-header');
       newDiv.html('<h4>click a gif to play/pause</h4>');
@@ -221,20 +184,91 @@ $('.topic-form').on('submit', function(){
       }
     },
 
+    showTopicAddedAlert: function(userInput){
+      var newAlert = $('<div class=\'alert alert-success\'></div>');
+      newAlert.html('<strong>Success!</strong> ' + userInput + ' has been added!');
+      $('.topic-button-section').prepend(newAlert);
+      setTimeout(function() {
+        newAlert.fadeOut(1000*2);
+      }, 1000*1);
+      setTimeout(function() {
+        newAlert.remove();
+      }, 1000*3);
+    },
+
+    showTopicRemovedAlert: function(topicToRemove) {
+      var name = browser.formatCapitalization(appState.nameToRemove);
+      var newAlert = $('<div class=\'alert alert-danger\'></div>');
+      newAlert.html(name + ' was successfully removed!');
+      $('.topic-button-section').prepend(newAlert);
+      setTimeout(function() {
+        newAlert.fadeOut(1000*2);
+      }, 1000*1);
+      setTimeout(function() {
+        newAlert.remove();
+      }, 1000*3);
+    },
+
     refreshDisplay: function() {
       switch(appState.phase) {
         case 'initialize':
           browser.renderButtons(appState.topicsArray);
           break;
+
         case 'addNewUserTopic':
           browser.renderButtons(appState.topicsArray);
+          browser.showTopicAddedAlert(appState.userInput);
           break;
+          browser.showTopicAddedAlert()
         case 'topicSelected': 
           browser.renderGifs(appState.currentGifArray);
+          break;
+        case 'removeUserTopic':
+          browser.showTopicRemovedAlert(appState.removeButtonId);
+          break;
       }
     }
-
   };
+
+// ================
+// EVENT MANAGEMENT
+// ================
+
+  // user clicks topic button
+  // jquery event management so listener is added to buttons created in future too
+  $('.topic-button-section').on('click', '.topic-button', function() {
+      appState.selectedTopic = $(this).attr('data-name');
+      appState.phase = 'topicSelected';
+      queries.sendGifRequest(appState.selectedTopic);
+      // wait to refresh display until after ajax call in queries.sendGifRequest because only then will we have new Gifs to display! 
+  });
+
+  $('.topic-button-section').on('click', '.remove-button', function() {
+    // get the remove button's id so we know which topic-button to remove
+    appState.removeButtonId = $(this).attr('data-id-num');
+    // save the corresponding name for removing in the array and showing the alert 
+    appState.nameToRemove = $('#button-' + appState.removeButtonId).text().toLowerCase();
+    // get that name removed from the array 
+    queries.removeUserTopic(appState.nameToRemove);
+    // remove the topic-button with that id
+    $('#button-' + appState.removeButtonId).remove();
+    // and remove its remove-button
+    $(this).remove();
+  });
+
+  // user clicks a gif image, call function to animate/static-ify the gif 
+  $('.gif-display-section').on('click', '.gif-image', function() {
+    browser.playPauseGif($(this));
+  });
+
+  $('.topic-form').on('submit', function(){
+    event.preventDefault();
+    appState.userInput = $('.topic-input').val().trim().toLowerCase();
+    queries.addNewUserTopic(appState.userInput);
+    //reset input to default placeholder/value
+    $('.topic-form').trigger('reset');
+  });
+
 
 // =============
 // INTIALIZE APP
