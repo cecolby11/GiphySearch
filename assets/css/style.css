@@ -163,6 +163,16 @@ footer{
     margin-top: 70px; /*so it starts below header*/
     margin-bottom: 100px; /*so it shows above topic section*/
   }
+
+ .topic-dropdown {
+    background: white;
+    color: var(--watermelon);
+    height: 30px;
+    margin:0;
+  }
+  .topic-form{
+    margin: 0;
+  }
 }
 
 /*phone landscape or smaller*/
@@ -178,6 +188,12 @@ footer{
     width: 90%;
     margin: 60px auto 100px auto;
     padding: 20px;
+  }
+  .topic-dropdown {
+    width: 185px;
+  }
+  .topic-form{
+    width: 180px;
   }
 
 }
