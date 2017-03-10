@@ -4,13 +4,13 @@
   --sky: #caebf2;
   --carbon: #a9a9a9;
   --watermelon: #ff3b3f;
-  --dark-watermelon: #e53538;
   --neutral: #efefef;
+  --white_transp: #00000033;
 }
 
 /*page elements*/
 body {
-  background: var(--dark-watermelon);
+  background: var(--watermelon);
 }
 .page {
   overflow: auto; /*contain everything (even sliver of empty space at top)*/
@@ -88,16 +88,26 @@ footer{
 }
 
 /*gif display*/
+.gif-display-section {
+  text-align: center; /*center gif divs inside*/ 
+  overflow :auto; /*contain everything inside*/
+}
 .gif-display-section .gif{
-  margin: 10px;
+  margin: 5px;
   display: inline-block;
+  width: 47%;
+  background-color: white;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 .gif-display-section .gif-image{
   /*starting from fixed height 200 link from giphy*/
-  max-width: 100%; /*contain within its container */
-  box-shadow: 0px 2px 7px var(--chalkboard);
+  height: auto;
+  width: 100%;
+  object-fit: cover; /*crop and center as needed*/
 }
 .gif-display-section .gif-rating{
+  text-align: center;
+  padding: 4px 8px;
   font-size: 17px;
   margin: 5px;
   font-family: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
@@ -152,9 +162,9 @@ footer{
     padding: 0;
   }
   .gif-display-section .gif-image{
-    height: 200px;
+    height: auto;
+    width: 100%;
     margin: 0 auto;
-    box-shadow: 0 0 0;
   }
   .gif-display-section .gif-rating{
     font-size: 10px;
@@ -177,17 +187,17 @@ footer{
 
 /*phone landscape or smaller*/
 @media screen and (max-width: 640px) {
+  .gif-display-section .gif{
+    width: 50%;
+    margin: 8px 4px;
+  }
   .gif-display-section .gif-image{
-    width: 80%;
+    width: 100%;
     height: auto;
-    object-fit: cover;
-    margin: auto;
   }
   .gif-display-section {
-    text-align: center;
-    width: 90%;
     margin: 60px auto 100px auto;
-    padding: 20px;
+    padding: 6px;
   }
   .topic-dropdown {
     width: 185px;
