@@ -4,22 +4,30 @@
   --sky: #caebf2;
   --carbon: #a9a9a9;
   --watermelon: #ff3b3f;
+  --dark-watermelon: #e53538;
   --neutral: #efefef;
 }
 
 /*page elements*/
+body {
+  background: var(--dark-watermelon);
+}
 .page {
-  padding-top: 20px;
-  width: 90%;
-  margin: 0 auto;
-  background: var(--white);
+  overflow: auto; /*contain everything (even sliver of empty space at top)*/
+  background-image: url("../images/textures/crossword.png");
+  width: 100%;
+  margin: 0;
+  padding: 0;
   color: var(--watermelon);
+
 }
 .container{
   max-width: 100%;
   min-height: calc(100vh - 90px); /* for sticky footer: viewport height - footer height - footer margin - footer border... put viewport in html links!*/
 }
 header {
+  width: 90%;
+  margin: 0 auto;
   text-align: right;
 }
 footer{
@@ -59,6 +67,7 @@ footer{
   border: var(--watermelon) solid thin;
   background: transparent;
   font-weight: bolder;
+  font-family: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
 }
 .topic-button-section .btn-group .remove-button{
   color: var(--watermelon);
@@ -73,13 +82,10 @@ footer{
   float:right;
   max-width: 220px;
 }
-.topic-form .topic-input{
-}
 .topic-form .submit-topic{
   background: var(--carbon);
   border: solid thin var(--carbon);
 }
-
 
 /*gif display*/
 .gif-display-section .gif{
@@ -94,6 +100,7 @@ footer{
 .gif-display-section .gif-rating{
   font-size: 17px;
   margin: 5px;
+  font-family: 'Arial', 'Helvetica Neue', Helvetica, sans-serif;
 }
 
 /*tablet or smaller */
