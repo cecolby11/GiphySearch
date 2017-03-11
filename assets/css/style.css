@@ -222,7 +222,7 @@ footer{
 /*phone landscape or smaller*/
 @media screen and (max-width: 640px) {
   .gif-display-section .gif{
-    width: 55%;
+    width: 82%;
   }
   .gif-display-section .gif-image{
     width: 100%;
