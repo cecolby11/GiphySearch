@@ -38,6 +38,7 @@ $(document).ready(function() {
     /* Vars for Giphy API request */
     'searchEndpoint': 'https://api.giphy.com/v1/gifs/search?',
     'numResults': '&limit=10',
+    'rating': '&rating=pg', // only get results that are PG or safer
     'apiKey': '&api_key=dc6zaTOxFJmzC', // include at query url end
 
     /**
@@ -68,7 +69,7 @@ $(document).ready(function() {
     sendGifRequest: function(topic) {
       // parameter q=xyz - search term
       var searchTerm = '&q=' + topic;
-      var queryURL = this.searchEndpoint +searchTerm + this.numResults + this.apiKey;
+      var queryURL = this.searchEndpoint + searchTerm + this.numResults + this.rating + this.apiKey;
 
       $.ajax({
         url: queryURL,
